@@ -5,100 +5,34 @@
 
 Module thisboard("LED", 0);
 
+// Declare variables
+char buf[250]; // Buffer for incoming SPI
+volatile byte pos_buffer = 0; // Keeps track of location in buffer
+volatile byte process_it = 0; // Indicates number of full packages in buffer
+volatile int pos_packet = 0; // Keeps track of location in packet
+volatile int len_packet = 0; // Length of incoming packet
+volatile byte pos_first_packet = 0; // Saves location of first packet
+
+
 void setup()
 {
   // Serial for debugging
-  Serial.begin(9600);
-  
-  delay(1000);
-  
-  // Setup LED that will be switched on or off
-  pinMode(LED, OUTPUT);
-  setBrightness(20);
-  
-  // I2C
-  // join i2c bus with address 2
-  Wire.begin(2);
-  // Sends current board information to master
-  Wire.onRequest(requestEvent);
-  // Receives actions from master
-  Wire.onReceive(receiveEvent);
- 
+  Serial.begin(115200); 
+
+  // Set OUTPUT pins 
+  pinMode(led, OUTPUT);
+  pinMode(MISO, OUTPUT);
+
+  // Set SPI as slave mode
+  SPCR |= _BV(SPE);
+
+  // Turn on interrupts
+  SPI.attachInterrupt();
 
 }
 
-void loop()
-{
-//  setBrightness(10);
-//  delay(1000);
-//  char buffer[7];
-//  char *data = thisboard.getData(buffer);
-//  for (int j = 0; j < 3; j++)
-//  { 
-//
-//    Serial.print(data[j]);
-//  }
-//  Serial.println(data[4]);
-//  
-//  setBrightness(98);
-//  delay(1000);
-//  char new_buffer[7];
-//  char *new_data = thisboard.getData(new_buffer);
-//  for (int j = 0; j < 3; j++)
-//  { 
-//
-//    Serial.print(new_data[j]);
-//  }
-//  Serial.println(new_data[4]);
-}
 
-// function that executes whenever data is requested by master
-// this function is registered as an event, see setup()
-void requestEvent()
-{
-  Serial.println("Sending data via Wire");
 
-  char data[7];
-  thisboard.getData(data);
-  for (int j = 0; j < 6; j++)
-  { 
-    Serial.print(data[j]);
-  }
-  Serial.println();
-  
-  thisboard.slaveSendData();
-  
-}
-
-// function that executes when data is received
-void receiveEvent(int howMany)
-{
-  char string[howMany];
-  int cur_string_index = 0;
-  while(Wire.available()) // loop through all
-  {
-    if (cur_string_index < howMany) // that is, the cur index is no more than the max # of bytes
-    {
-      string[cur_string_index] = Wire.read(); // receive byte as a character
-      Serial.print(string[cur_string_index]);
-      cur_string_index++;
-    }
-    else
-    {
-      Wire.read(); // ignore the byte
-    }
-  }
-  Serial.println(string); // print the integer
-  setBrightness(thisboard.parseValue(string));
-}
-  
-void setAction(char name[], int value)
-{
-  if (name == "LED")
-  {
-    setBrightness(value);
-  }
-}
 
 void setBrightness(byte percent)
 {
@@ -129,5 +63,56 @@ void setBrightness(byte percent)
 
   int req_analog_value = percent * 255 / 100;
   analogWrite(LED, req_analog_value);
+}
+
+// Interrupt routine for receiving SPI data and placing in buffer
+ISR (SPI_STC_vect)
+{
+  byte c = SPDR // Grab byte form SPI data register
+
+  // If buffer not in end add byte
+  if (pos_buffer < sizeof (buf))
+    {
+    buf [pos_buffer++] = c; // Increment position in buffer
+    pos_packet++; // Increment position in packet
+
+    switch (pos_packet)
+    {
+      case (1):
+        if (process_it == 0) // If this is first packet received
+        {
+          if (pos_buffer != 0)
+          {
+            pos_first_packet = pos_buffer - 1; // Save the location of its start byte
+          }
+          else // If current location is first address of buffer
+          {
+            pos_first_packet = sizeof (buf) - 1; // Save location of start byte as last in buffer
+          }        
+        }
+    }
+
+    if (pos_packet == 5) // If reading first byte of length 
+    {
+      len_packet = c << 8; // Save as length
+    }
+    
+    if (pos_packet == 6) // If reading second byte of length
+    {
+      len_packet += c; // Save as part of length
+    }
+
+    if (pos_packet == 6 + len_packet) // If full package has been read
+    {
+      pos_packet = 0; // Indicate position in packet as beginning
+      process_it += 1; // Increment flag of available packets in buffer
+    }
+
+    }  // end of room available
+
+  else // If end of buffer reached
+  {
+    
+  }
 }
 
