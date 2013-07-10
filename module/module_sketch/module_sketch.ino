@@ -11,11 +11,14 @@
  */
 
 #include <SPI.h>
+#include <AHComm.h>
+#include <Module.h>
 
 // INITIALIZE MODULES AND VARIABLES
 
 AHComm ahcomm();
-LEDModule thismodule();
+Module thismodule();
+int led = 5;
 
 // SETUP
 void setup()
@@ -30,22 +33,23 @@ void loop()
   if (ahcomm.packetAvailable())
   {
   	// Create local array with size of packet and populate it with data
-  	byte packet[ahcomm.getPacketSize()];
-  	ahcomm.readPacket(packet);
+  	byte packet[ahcomm.packetSize()];
+  	ahcomm.readPacket(packet, ahcomm.packetSize());
 
   	// Parse value
   	thismodule.actOn(packet);
 
-  	// Send back updated value
+  	/* Send back updated value
   	if (thismodule.statusRequested())
   	{
   		ahcomm.transmit(thismodule.getStatus())
-  	}
+  	}*/
   }
 }
 
-// SPI INTERRUPT
+// SPI Interrupt Routine
 ISR (SPI_STC_vect)
 {	
 	ahcomm.receive(SPDR);
 }
+
