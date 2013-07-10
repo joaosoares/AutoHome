@@ -16,8 +16,14 @@
 
 // INITIALIZE MODULES AND VARIABLES
 
+<<<<<<< HEAD
 AHComm ahcomm(12);
 Module thismodule;
+=======
+AHComm ahcomm();
+Module thismodule();
+int led = 5;
+>>>>>>> 5bc6db3b06051bc4390c8e401931e4a2924b313f
 
 // SETUP
 void setup()
@@ -38,7 +44,7 @@ void loop()
   	// Parse value
   	thismodule.actOn(packet);
 
-  	// Send back updated value
+    // Send back updated values
   	if (thismodule.statusRequested())
   	{
       // THIS PART IS COMPLETELY WRONG
@@ -46,10 +52,11 @@ void loop()
       thismodule.getStatus(array);
   		ahcomm.transmit(array);
   	}
+  	}
   }
 }
 
-// SPI INTERRUPT
+// SPI Interrupt Routine
 ISR (SPI_STC_vect)
 {	
 	ahcomm.receive(SPDR);
