@@ -16,14 +16,10 @@
 
 // INITIALIZE MODULES AND VARIABLES
 
-<<<<<<< HEAD
+
 AHComm ahcomm(12);
 Module thismodule;
-=======
-AHComm ahcomm();
-Module thismodule();
-int led = 5;
->>>>>>> 5bc6db3b06051bc4390c8e401931e4a2924b313f
+
 
 // SETUP
 void setup()
