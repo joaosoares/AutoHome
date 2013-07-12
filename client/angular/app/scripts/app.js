@@ -7,11 +7,19 @@ angular.module('angularApp', [])
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/:groupId/', {
-        templateUrl: 'views/group.html',
-        controller: 'GroupCtrl'
+      .when('/:roomId/', {
+        templateUrl: 'views/room.html',
+        controller: 'RoomCtrl'
+      })
+      .when('/myroute', {
+        templateUrl: 'views/myroute.html',
+        controller: 'MyrouteCtrl'
+      })
+      .when('/room', {
+        templateUrl: 'views/room.html',
+        controller: 'RoomCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/404/',
       });
   }]);

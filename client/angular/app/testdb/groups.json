@@ -1,0 +1,11 @@
+[{"name":"Living Room","id":19,"devices":1,"times used":16},
+{"name":"Attic","id":25,"devices":2,"times used":18},
+{"name":"Bedroom","id":61,"devices":3,"times used":4},
+{"name":"Kitchen","id":88,"devices":4,"times used":10},
+{"name":"Bathroom","id":39,"devices":5,"times used":14},
+{"name":"Dining Room","id":75,"devices":6,"times used":3},
+{"name":"Home Office","id":78,"devices":8,"times used":20},
+{"name":"Office","id":2,"devices":9,"times used":5},
+{"name":"Garden","id":31,"devices":11,"times used":15},
+{"name":"Kids Room","id":100,"devices":14,"times used":13},
+{"name":"Laundry Room","id":40,"devices":16,"times used":20}]

@@ -1,85 +1,20 @@
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="brand" href="#">AutoHome</a>
-      <div class="navbar-content">
-        <ul class="nav pull-right">
-          <li class="active">
-            <a href="#">Messages</a> 
-          </li>
-          <li>
-            <a href="#">Settings</a> 
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+
+<div class="row">
+	<div class="span12">
+		<form action="" class="navbar-search">
+			<input type="text" class="" placeholder="Search">
+		</form>
+	</div>
 </div>
 
-<div class="container">
-  <div class="row">
-    <div class="span4">
-    	<div id="main-list-view">
-    		.
-    	</div>
-<!--       <div class="well">
-        <h3>Living room</h3>
-        <p>3 devices attached</p>
-        <a class="btn btn-primary" href="#">See</a> 
-      </div>
-      <div class="well">
-        <h3>Bathroom</h3>
-        <p>1 device attached</p>
-        <a class="btn btn-primary" href="#">Turn on</a> 
-      </div>
-      <div class="well">
-        <h3>Bedroom</h3>
-        <p>10 devices attached</p>
-        <a class="btn btn-primary" href="#">Turn on</a> 
-      </div>
-      <div class="well">
-        <h3>Attic</h3>
-        <p>1 device attached</p>
-        <a class="btn btn-primary" href="#">Turn on</a> 
-      </div> -->
-    </div>
-    <div class="span8">
-      <h2>Living Room</h2>
-      <p>Metadata</p>
-      <br>
-      <div class="media">
-        <a class="pull-left" href="#">
-<img class="media-object" src="http://placehold.it/80x80">
-</a>
-        <div class="media-body">
-          <h3 class="media-heading">Home Theater</h3>
-          <a class="btn btn-primary btn-mini">Turn on</a>
-          <p></p>
-        </div>
-      </div>
-      <div class="media">
-        <a class="pull-left" href="#">
-<img class="media-object" src="http://placehold.it/80x80">
-</a>
-        <div class="media-body">
-          <h3 class="media-heading">Lights</h3>
-          <a class="btn btn-primary btn-mini">Turn on</a>
-          <p></p>
-        </div>
-      </div>
-      <div class="media">
-        <a class="pull-left" href="#">
-<img class="media-object" src="http://placehold.it/80x80">
-</a>
-        <div class="media-body">
-          <h3 class="media-heading">Table lights
-            <a class="btn btn-primary">Turn on</a> 
-          </h3>
-          <p>This is the content for your media.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="row">
+	<div class="span4" ng-repeat="group in groups">
+		<div class="well" ng-click>
+	    <h3>{{group.name}}</h3>
+	    <p>{{group.devices}} device(s) attached</p>
+	    <a class="btn btn-primary" href="#/{{group.id}}">See</a> 
+	    </div>
+	</div>
 </div>
 
 

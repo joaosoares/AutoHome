@@ -12,9 +12,9 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->  
 
         <!-- build:css({.tmp,app}) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="styles/variables.css">
         <link rel="stylesheet" href="styles/bootswatch.css">
+        <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
 </head>
   <body ng-app="angularApp">
@@ -28,6 +28,24 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#"><img ng-src="img/logo_small.png" alt=""></a>
+          <div class="navbar-content">
+            <ul class="nav pull-right">
+              <li class="active">
+                <a href="#">Messages</a> 
+              </li>
+              <li>
+                <a href="#">Settings</a> 
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container" ng-view=""></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -43,6 +61,7 @@
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/room.js"></script>
     <!-- endbuild -->
 
         <!-- build:js scripts/plugins.js -->
@@ -66,6 +85,7 @@
         <script src="bower_components/angular-resource/angular-resource.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="scripts/controllers/myroute.js"></script>
         <!-- endbuild -->
 </body>
 </html>

@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="span8">
+    <a href="#">Back</a>
+    <h1>{{room.name}}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="span9">
+    <p class="lead">{{room.description}}</p>
+    <div class="media well" ng-repeat="device in room.devices">
+      <a class="pull-left" href="">
+        <img class="media-object" ng-src="{{device.img}}" width=80;>
+      </a>
+      <div class="media-body">
+        <h3 class="media-heading"> {{ device.name }} </h3>
+        <div class="btn-group">
+          <a class="btn btn-primary">Turn on</a>
+          <a class="btn btn-normal">Super</a>
+        </div>
+        <p></p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="span3">
+    <ul class="nav nav-list">
+      <li class="nav-header">Options</li>
+      <li><a href="">Reorganize room</a></li>
+      <li><a href="">Change stuff</a></li>
+      <li><a href="">More option</a></li>
+    </ul>
+  </div>
+</div>

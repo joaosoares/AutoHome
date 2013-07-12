@@ -158,7 +158,7 @@ void motherboardResource(WebServer &server, WebServer::ConnectionType type, char
   // GET Request
   if (type == WebServer::GET)
   {
-
+    
   }
 
   // POST Request

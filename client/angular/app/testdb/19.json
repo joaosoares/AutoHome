@@ -1,0 +1,17 @@
+{
+	"name":"Living Room",
+	"description": "This is the living room",
+	"id":19,
+
+	"devices" : [   
+    {   "name" : "Lights",
+    	"serial" : 23,
+    	"img": "img/lights.png"
+    },
+
+    {   "name" : "Outlet",
+    	"serial" : 23,
+    	"img": "img/outlet.png"
+    }
+  	]
+}
