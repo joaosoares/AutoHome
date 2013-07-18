@@ -79,5 +79,23 @@ uint8_t modSetup(void)
   */
  uint8_t modGetStatus(uint8_t body[])
  {
- 	
+ 	/* Byte 1: Global Status Register */
+ 	body[0] = status;
+
+ 	/* Byte 2: Brightness Variable */
+ 	body[1] = brightness;
+
+ 	/* Return 1 to mark sucess */
+ 	return 1;
  }
+
+ /**
+  * Updates the PWM Timer with the new value for brightness
+  * and return the previous value of brightness in the timer
+  */
+ uint8_t modSetBrightness(uint8_t value)
+ {
+ 	// CREATE FUNCTION IN FUTURE
+ 	return brightness;
+ }
+ 
