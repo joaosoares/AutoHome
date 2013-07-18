@@ -39,6 +39,9 @@ int time_elapsed;
 // Time between callbacks in ms
 #define CALLBACK_DELAY 1000
 
+// SPI
+const int slaveSelectPin = 10;
+
 void mainCmd(WebServer &webserver, WebServer::ConnectionType type, char *, bool)
 {
   webserver.httpSuccess("application/json");
@@ -46,10 +49,10 @@ void mainCmd(WebServer &webserver, WebServer::ConnectionType type, char *, bool)
   // POST Request
   if (type == WebServer::GET)
   {
-    webserver.print("{\"name\":\"AutoHome API system\",")
-    webserver.print("\"methods\":["
-      webserver.print("{\"scheme\":\"overview\",\"description\":\"Returns a bird's eye overview of the system so that the main structure of the client application can be built.\"}"
-      webserver.print("{\"scheme\":\"devices\", \"description\":\"A collection of all devices in a system.\"}"
+    webserver.print("{\"name\":\"AutoHome API system\",");
+    webserver.print("\"methods\":[");
+      webserver.print("{\"scheme\":\"overview\",\"description\":\"Returns a bird's eye overview of the system so that the main structure of the client application can be built.\"}");
+      webserver.print("{\"scheme\":\"devices\", \"description\":\"A collection of all devices in a system.\"}");
     webserver.print("]}");
   }
 }
@@ -76,12 +79,15 @@ void setup()
 	// WEBSERVER
 	// URL Handlers
 	webserver.setDefaultCommand(&mainCmd);
-//	webserver.addCommand("/", &mainCmd);
 
 	// CALLBACK
 	// Set to current time
 	time_elapsed = millis();
-
+        
+        // SPI
+        // Begin
+        SPI.begin();
+        pinMode(slaveSelectPin, OUTPUT);
 }
 
 void loop() 
@@ -93,14 +99,13 @@ void loop()
 
         if (millis() - time_elapsed > CALLBACK_DELAY)
         {
-          SPI.begin(4);
-          SPI.send(254);
-          SPI.send(254);
-          SPI.send(254);
-          SPI.send(254);
-          SPI.send(254);
-          SPI.send(254);
-          SPI.send(254);
+          digitalWrite(slaveSelectPin, LOW);
+          SPI.transfer(254);
+          SPI.transfer(254);
+          SPI.transfer(254);
+          SPI.transfer(254);
+          SPI.transfer(254);
+          digitalWrite(slaveSelectPin, HIGH);
         }
 
 }
