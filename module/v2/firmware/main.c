@@ -6,7 +6,9 @@
 
 /* Firmware for a SPI capable LED-Test module. Modules use the AHComm-V1 protocol*/
 
-#include <avr/io.h>
+ #include <avr/io.h>
+ #include "AHComm.h"
+ #include "LEDTestModuleV1.h"
 
 int main(void)
 {
