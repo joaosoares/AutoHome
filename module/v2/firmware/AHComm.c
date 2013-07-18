@@ -26,6 +26,8 @@
  uint16_t packet_length = 0;
  /* Keeps length of packet in transmit buffer */
  uint16_t transmit_packet_length = 0;
+ /* Keeps next byte to be transmitted */
+ uint16_t transmit_index = 0;
 
  /**
   * Function initializes the SPI hardware to settings defined in AHCOmm 
@@ -33,9 +35,9 @@
  void commSetup()
  {
  	/* Set data direction for SPI pins */
- 	DDR_SPI = (1<<DD_MOSI) | (1<<DD_SCK);
- 	/* Enable SPI, Set as Slave, Set Clock rate to fck/16 */
- 	SPCR = (1<<SPE) | (0<<MSTR) | (1<<SPR0);
+ 	DDR_SPI = (1<<DD_MISO);
+ 	/* Enable SPI, Set as Slave. Enable Interrupt */
+ 	SPCR = (1<<SPE) | (0<<MSTR) | (1<<SPIE);
  }
 
  /** 
@@ -297,3 +299,48 @@ uint8_t encapsulatePacket(uint8_t body_of_packet)
 	return 1;
 }
 
+/**
+ * Each time is called the function send the next byte from trnasmit buffe
+ * If no packet is present in buffer the function acts accordingly. After 
+ * transmission buffer is erased. Returns:
+ * 	0: Transmission Failed
+ * 	1: Byte has been Trasnmitted
+ * 	2: Last Byte has been Transmitted
+ * 	3: Nothing to be transmitted
+ */
+uint8_t commTransmit(void)
+{
+	/* If the length of packet in buffer is nonzero */
+	if ((transmit_packet_length != 0) && (transmit_index < transmit_packet_length)
+	{
+		/* Send next byte in buffer and erase */
+		SPDR = transmit_buffer[transmit_index];
+		/* Erase byte from buffer and increment index */
+		transmit_buffer[transmit_index++] = 0;
+
+		/* if transmit index has reached end of message */
+		if (transmit_index == transmit_packet_length)
+		{
+			/* Reset packet length and transmit_index */
+			transmit_packet_length = 0;
+			transmit_index = 0;
+			/* Return that last byte has been successfully transmitted */
+			return 2;
+		}
+	}
+
+	/* If there is nothing to transmit return flag */
+	else if (transmit_packet_length == 0)
+	{
+		return 3;
+	}
+
+	/* In the mystical case that this code runs return an error */
+	else 
+	{
+		return 0;
+	}
+
+	/* A byte has been successfully transmitted */
+	return 1;
+}
