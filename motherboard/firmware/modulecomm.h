@@ -8,8 +8,6 @@
  * buffer and later accessed.
  */
 
-#include <avr/io.h>
-
 /* Packet element type */
 typedef struct {
 	uint32_t startBytes;
@@ -23,7 +21,7 @@ typedef struct {
 typedef struct {
 	int size; /* maxium number of elements */
 	int start; /* index of oldest element */
-	int end /* index at which to write new element */
+	int end; /* index at which to write new element */
 	PacketType *packets; /* vector of packets */
 } CircularBuffer;
 
@@ -85,12 +83,12 @@ void cbWrite(CircularBuffer *cb, PacketType *packet) {
  * @param cb   The circular buffer
  * @param byte The byte to be written
  */
-void cbWriteByte(CircularBuffer *cb, uint8_t byte) {
-	cb->packets[cb->end] = byte;
-	cb->end = (cb->end + 1) % cb->size;
-	if (cb->end == cb->start) /* see function above for explanation */
-		cb->start = (cb->start + 1) % cb->size
-}
+//void cbWriteByte(CircularBuffer *cb, uint8_t *byte) {
+//	cb->packets[cb->end] = *byte;
+//	cb->end = (cb->end + 1) % cb->size;
+//	if (cb->end == cb->start) /* see function above for explanation */
+//		cb->start = (cb->start + 1) % cb->size
+//}
 
 /**
  * Read oldest element. Must ensure !cbIsEmpty() first.
