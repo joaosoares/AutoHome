@@ -41,6 +41,8 @@ int main(void)
         		commEncapsulatePacket(array);
         	}
         }
+        /* Trasmit a byte at a time from the transmit buffer */
+        commTransmit();
     }
     return 0;   /* never reached */
 }
