@@ -53,5 +53,5 @@ void setup()
 	// WEBSERVER
 	// URL Handlers
 	webserver.setDefaultCommand(&main);
-	webserver.addCommand("")
+	webserver.addCommand("/")
 }
