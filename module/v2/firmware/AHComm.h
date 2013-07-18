@@ -32,14 +32,15 @@ uint16_t commPacketSize(void);
 uint8_t commReceive(uint8_t);
 void commTransmit(uint8_t);
 uint8_t commReadPacket(uint8_t);
-static uint8_t commCheckPacket(uint16_t);
+static uint8_t checkPacket(uint16_t);
+static uint8_t computeChecksum(uint8_t);
 
-/* Declare Public Variables */
-uint16_t module_type;
 
 /* Declare Private Variables */
 uint8_t buffer[INCOMINGBUFFER_SIZE];
+uint8_t computed_checksum[CHECKSUM_SIZE];
 uint16_t buffer_write_index;
 uint16_t buffer_read_index;
+uint16_t module_type;
 
  #endif

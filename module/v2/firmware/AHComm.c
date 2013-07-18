@@ -76,7 +76,11 @@
  		if (correct_bytes_num == STRBYTES_SIZE)
  		{
  			/* Check if packet is correct and update while variable*/
- 			packet_found = checkPacket(buffer_read_index);
+ 			if (checkPacket(buffer_read_index) == 1)
+ 			{
+ 				packet_found = true;
+ 			}
+ 			
  		}
 
  		 /* If the pointer does not refer to a valid packet increment */
@@ -121,13 +125,62 @@ uint16_t commPacketSize(void)
  * Assumes the packet has been checked and passed. After reading destroys 
  * the packet by writing zeroes to location.
  */
-uint8_t readPacket(uint8_t array[])
+uint8_t commReadPacket(uint8_t array[])
 {
-	/* Iterate over the body of packet and save to array */
-	for (uint16_t i = 0; i<packet_length; i++)
+	/* Erase header of packet and increment index till body*/
+	for (int i = 0; i<HEADER_SIZE; i++)
 	{
-		
+		array[buffer_read_index++] = 0;
 	}
+	/* Iterate over the body of packet and save to array */
+	for (uint16_t i = 0; i < (packet_length-HEADER_SIZE); i++)
+	{
+		/* increment the temporary index */
+		buffer_read_index++;
+		/* Wrap around end of buffer has been reached */
+		if (buffer_read_index >= INCOMINGBUFFER_SIZE)
+		{
+			buffer_read_index -= INCOMINGBUFFER_SIZE;
+		}
+		/* Read Byte of Body then erase byte from buffer*/
+		packet[i] = buffer[buffer_read_index];
+		buffer[buffer_read_index] = 0;
+	}
+
+	/* For future compatibility */
+	return 1
 }
 
+/**
+ * Checks if the packet is correctly encapsulated by the defined protocol.
+ * Returns:
+ *  0 if general error is found
+ *  1 if packet is correct
+ *  2-255 RESERVED FOR FUTURE
+ */
+uint8_t checkPacket(uint16_t start_of_packet)
+{
+	/* Check for sequence of starting bytes */
+	uint8_t correct_bytes_num = 0;
+	for (int j = 0; j < STRBYTES_SIZE; i++)
+	{
+		/* Check if byte being read is a valid start byte */
+		if (buffer[buffer_read_index + j] == STRBYTES)
+		{
+			/* Increment tracking of correct bytes */
+			correct_bytes_num++;
+		}
+	}
+
+	/* Continue with Checks */
+	if (correct_bytes_num == STRBYTES_SIZE)
+	{
+		/* Check for the ID TO BE IMPLEMENTED!!! */
+		if (true)
+		{
+			/* Check the checksum */
+			if 
+		}
+	}
+}
 
