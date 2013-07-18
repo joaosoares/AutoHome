@@ -5,16 +5,10 @@
  * July 2013
  */
 
-#include "module.h"
 
- /* Declare Variables */
- /**
-  * Global status variable bits:
-  *  Bit 0: 
-  */
- uint8_t status = 0x00;
- /* Start LED brightness at 0 */
- led1_brightness = 0;
+#include "LEDTestModuleV1.h"
+
+
 
 /**
  * Setups the module including: Direction of pins,
@@ -22,7 +16,16 @@
  */
 uint8_t modSetup(void)
 {
+   /* Declare Variables */
+   /**
+    * Global status variable bits:
+    *  Bit 0: 
+    */
+   status = 0x00;
+   /* Start LED brightness at 0 */
+   led1_brightness = 0;
 	// ADD CODE HERE!!!!
+  return 0; 
 }
 
  /* Parses the body of the packet and evaluates commands */

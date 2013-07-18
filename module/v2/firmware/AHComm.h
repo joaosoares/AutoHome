@@ -34,11 +34,13 @@
  #define MOD_ADLER32 65521
 
 /* Declare Function Prototypes */
+void commSetup(void);
 uint8_t commPacketAvailable(void);
 uint16_t commPacketSize(void);
 uint8_t commReceive(uint8_t);
-void commTransmit(uint8_t);
-uint8_t commReadPacket(uint8_t);
+void commTransmit(uint8_t []);
+uint8_t commEncapsulatePacket(uint8_t []);
+uint8_t commReadPacket(uint8_t []);
 static uint8_t checkPacket(uint16_t);
 static uint8_t computeChecksum(uint16_t, uint8_t);
 

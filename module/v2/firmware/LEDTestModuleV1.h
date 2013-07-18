@@ -5,11 +5,11 @@
  * July 2013
  */
 
- #ifndef Module_h
- #define Module_h
+ #ifndef LEDTestModuleV1_h
+ #define LEDTestModuleV1_h
 
  /* Make Ncessary inclusions */
- #include "avr/io.h"
+ #include <avr/io.h>
 
  /* Possible Commands Preceding Body of Packet */
  #define LED1_ON_CMD 30
@@ -26,7 +26,7 @@
  #define BRIGHTNESS_MAX 255
 
  /* Declare public functions */
- uint8_t modSetup(void)
+ uint8_t modSetup(void);
  uint8_t modActOn(uint8_t []);
  uint8_t modStatusRequested();
  uint8_t modGetStatus(uint8_t []);

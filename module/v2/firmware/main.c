@@ -14,7 +14,7 @@ int main(void)
 {
     /* Initialize the module and internal variables */
     /* Setup pin directions and interrupts */
-    thismodule.setup();
+    modSetup();
     /* Setup SPI communication */
 	commSetup();
 
@@ -25,20 +25,20 @@ int main(void)
         	/* Create array with size of packet to be read */
         	uint8_t packet[commPacketSize()];
         	/* Read the body of the packet into packet array */
-        	commReadPacket(packet, commPacketSize());
+        	commReadPacket(packet);
 
         	/* Update system status with information from packet */
-        	thismodule.actOn(packet);
+        	modActOn(packet);
 
         	/* If requested, return a status query */
-        	if (thismodule.statusRequested())
+        	if (modStatusRequested())
         	{
         		/* Create array to store body of status packet */
-        		uint8_t array[thismodule.sizeOfPacket()];
+        		uint8_t array[200];
         		/* Saves into array the module's current status */
-        		thismodule.getStatus(array);
+        		modGetStatus(array);
         		/* Packages and sends body through SPI */
-        		commTransmit(array);
+        		commEncapsulatePacket(array);
         	}
         }
     }
@@ -46,7 +46,7 @@ int main(void)
 }
 
 /* Interrupt routine for receiving SPI data */
-ISR (SPI_STC_vect)
+void ISR (SPI_STC_vect)
 {
 	commReceive(SPDR);
 }

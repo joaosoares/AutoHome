@@ -176,7 +176,7 @@ uint8_t commReadPacket(uint8_t array[])
  *  Bit 6: Correct ID
  *  Bit 5: Correct Start Byte 
  */
-uint8_t checkPacket(uint16_t start_of_packet)
+static uint8_t checkPacket(uint16_t start_of_packet)
 {
 	/* Tracks the packet integrity */
 	uint8_t packet_integrity = 0;
@@ -229,7 +229,7 @@ uint8_t checkPacket(uint16_t start_of_packet)
  * Function generates a checksum and saves to array whose pointer
  * was passed as argument to function.
  */
-uint8_t computeChecksum(uint16_t start_of_packet, uint8_t checksum, uint16_t length)
+static uint8_t computeChecksum(uint16_t start_of_packet, uint8_t checksum, uint16_t length)
 {
 	/* To be Created */
 	return 0;
@@ -243,7 +243,7 @@ uint8_t computeChecksum(uint16_t start_of_packet, uint8_t checksum, uint16_t len
  *  1: Packet added to buffer
  *  2-255: Reserved for future use
  */
-uint8_t encapsulatePacket(uint8_t body_of_packet)
+uint8_t commEncapsulatePacket(uint8_t body_of_packet[])
 {
 
 	/**
