@@ -21,3 +21,14 @@ For the initial prototypes, the Arduino platform is used in the devices, due to 
 The module is the hardware that physically connects electrical appliances to the AutoHome system. There will be distinct modules for each kind of appliance. Their functionality will depend on the kind of control desire, eg. light control modules will connect to lightbulbs and allow them to be dimmed, turned on, or off.
 
 For initial prototypes of the system, modules yet do not perform useful functionality, except for communication with the device motherboard.
+
+- Dimmer
+- Light switch
+- Electrial outlet
+- Presence sensor
+- Sensors and actuators
+- Infrared
+- Fan
+- Irrigation
+- Porteiro eletronico
+- Pool

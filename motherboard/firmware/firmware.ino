@@ -8,14 +8,16 @@
  *  - Communicating with other devices
  *  - Controling attached modules
  *
- * Started by João Soares on Jul 17, 2013
+ * Started on Jul 17, 2013
  */
+
 #include <SPI.h>
 #include <Ethernet.h>
 #include <EthernetClient.h>
 #include <EthernetServer.h>
 #include <EthernetUdp.h>
 #include <WebServer.h>
+#include "modulecomm.h"
 
 // -- VARIABLES AND INITIAL CONFIG --
 
@@ -53,5 +55,16 @@ void setup()
 	// WEBSERVER
 	// URL Handlers
 	webserver.setDefaultCommand(&main);
-	webserver.addCommand("/")
+	webserver.addCommand("/", &overviewCmd);
+
 }
+
+void loop() 
+{
+	/* Process incoming connections */
+	char buff[64];
+	int len = 64;
+	webserver.processConnection(buff, &len);
+}
+
+void 
