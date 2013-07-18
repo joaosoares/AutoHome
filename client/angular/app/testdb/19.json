@@ -11,7 +11,14 @@
 
     {   "name" : "Outlet",
     	"serial" : 23,
-    	"img": "img/outlet.png"
+    	"img": "img/outlet.png",
+        "actions": [
+        {
+            "name": "See efficiency",
+            
+
+        }
+        ]
     }
   	]
 }
