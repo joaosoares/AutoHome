@@ -344,3 +344,4 @@ uint8_t commTransmit(void)
 	/* A byte has been successfully transmitted */
 	return 1;
 }
+
