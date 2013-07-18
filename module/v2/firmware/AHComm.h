@@ -1,5 +1,5 @@
 /**
- * AUTO HOME COMMUNICATIONS LIBRARY
+ * AUTO HOME COMMUNICATIONS LIBRARY HEADER FILE
  * This library handles all low level communication between the
  * module and the mother board including: Packet forming; Packet
  * parsing; SPI Communication; Error detection.
@@ -10,6 +10,9 @@
 
  #ifndef AHComm_h
  #define AHComm_h
+
+ /* Make Necessary Inclusions */
+ #include "avr/io.h"
 
  /* Make Definitions Regarding Packet Format and Size */
  #define STRBYTES 254
@@ -22,33 +25,21 @@
  /* Make Internal Definitions */
  /* Size of circular buffer for incoming packets */
  #define INCOMINGBUFFER_SIZE 255
- 
- /* Make Necessary Inclusions */
- #include "avr/io.h"
 
- class AHComm
- {
- 	public:
-	 	/* Declare Public Functions */
-	 	AHComm(uint16_t);
-	 	uint8_t packetAvailable();
-	 	uint16_t packetSize();
-	 	uint8_t receive(uint8_t);
-	 	void transmit(uint8_t);
-	 	void readPacket(uint8_t);
+/* Declare Function Prototypes */
+uint8_t commPacketAvailable(void);
+uint16_t commPacketSize(void);
+uint8_t commReceive(uint8_t);
+void commTransmit(uint8_t);
+uint8_t commReadPacket(uint8_t);
+static uint8_t commCheckPacket(uint16_t);
 
-	 	/* Declare Public Variables */
-	 	uint16_t module_type;
+/* Declare Public Variables */
+uint16_t module_type;
 
-	 private:
-	 	/* Declare Private Functions */
-	 	uint8_t checkPacket(uint16_t);
-
-	 	/* Declare Private Variables */
-	 	uint8_t buffer[INCOMINGBUFFER_SIZE];
-	 	uint16_t buffer_write_index;
-	 	uint16_t buffer_read_index;
-
- };
+/* Declare Private Variables */
+uint8_t buffer[INCOMINGBUFFER_SIZE];
+uint16_t buffer_write_index;
+uint16_t buffer_read_index;
 
  #endif

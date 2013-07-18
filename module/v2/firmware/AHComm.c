@@ -16,6 +16,11 @@
  buffer_write_index = 0;
  /* Holds location of next read in buffer */
  buffer_read_index = 0;
+ /**
+  * Keeps the length of the next packet to be read. Should be set
+  * back to zero after reading the respective packet.
+  */
+ packet_length = 0;
 
  /** 
   * Adds a byte of data into the circular buffer. Updates the 
@@ -74,12 +79,55 @@
  			packet_found = checkPacket(buffer_read_index);
  		}
 
- 		
  		 /* If the pointer does not refer to a valid packet increment */
  		else 
  		{
  			buffer_read_index++;
  		}
  	}
+
+ 	/**
+ 	 * Return: 
+ 	 * 	0 if no packet found
+ 	 * 	1 if packet found
+ 	 * 	2-255 RESERVED FOR FUTURE USE
+ 	 */
+ 	
+ 	if (packet_found)
+ 	{
+ 		return 1;
+ 	}
+
+ 	return 0;
  }
+
+/**
+ * Returns the size of the packet at current read index.
+ * The function assumes that the read index is updated and an
+ * ideal packet is present at the given location. Function 
+ * read two bytes and concatenates into a single integer to return.
+ */
+uint16_t commPacketSize(void)
+{
+	/* Read the LENGTH at the header defined by the protocol */
+	packet_length = buffer[buffer_read_index + STRBYTES_SIZE + ID_SIZE] << 8;
+	packet_length += buffer[buffer_read_index + STRBYTES_SIZE + ID_SIZE + 1];
+
+	return packet_length;
+}
+
+/**
+ * Returns the body of the packet at the current location of the read index.
+ * Assumes the packet has been checked and passed. After reading destroys 
+ * the packet by writing zeroes to location.
+ */
+uint8_t readPacket(uint8_t array[])
+{
+	/* Iterate over the body of packet and save to array */
+	for (uint16_t i = 0; i<packet_length; i++)
+	{
+		
+	}
+}
+
 
