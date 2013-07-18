@@ -49,5 +49,6 @@ uint8_t transmit_buffer[TRANSMITBUFFER_SIZE];
 uint16_t buffer_write_index;
 uint16_t buffer_read_index;
 uint16_t module_type;
+uint16_t transmit_packet_length;
 
  #endif

@@ -16,14 +16,27 @@
 
  /* Make initial variable definitions */
  /* Hold location of next write in buffer */
- buffer_write_index = 0;
+ uint16_t buffer_write_index = 0;
  /* Holds location of next read in buffer */
- buffer_read_index = 0;
+ uint16_t buffer_read_index = 0;
  /**
   * Keeps the length of the next packet to be read. Should be set
   * back to zero after reading the respective packet.
   */
- packet_length = 0;
+ uint16_t packet_length = 0;
+ /* Keeps length of packet in transmit buffer */
+ uint16_t transmit_packet_length = 0;
+
+ /**
+  * Function initializes the SPI hardware to settings defined in AHCOmm 
+  */
+ void commSetup()
+ {
+ 	/* Set data direction for SPI pins */
+ 	DDR_SPI = (1<<DD_MOSI) | (1<<DD_SCK);
+ 	/* Enable SPI, Set as Slave, Set Clock rate to fck/16 */
+ 	SPCR = (1<<SPE) | (0<<MSTR) | (1<<SPR0);
+ }
 
  /** 
   * Adds a byte of data into the circular buffer. Updates the 
@@ -217,6 +230,7 @@ uint8_t checkPacket(uint16_t start_of_packet)
 uint8_t computeChecksum(uint16_t start_of_packet, uint8_t checksum, uint16_t length)
 {
 	/* To be Created */
+	return 0;
 }
 
 /**
@@ -229,8 +243,6 @@ uint8_t computeChecksum(uint16_t start_of_packet, uint8_t checksum, uint16_t len
  */
 uint8_t encapsulatePacket(uint8_t body_of_packet)
 {
-	/* Declare variables */
-	uint8_t temp_write_index = 0;
 
 	/**
 	 * Check if a start byte is found in buffer. If true, a packet is in 
@@ -268,6 +280,20 @@ uint8_t encapsulatePacket(uint8_t body_of_packet)
 	}
 
 	/* Add the checksum between the length and the body in buffer */
-	
+	/* Create variable to store checksum */
+	uint8_t computed_checksum[CHECKSUM_SIZE];
+	/* Compute Checksum */
+	computeChecksum(body_of_packet, computed_checksum, sizeof(body_of_packet));
+	/* Write checksum to buffer */
+	for (int i = 0; i<CHECKSUM_SIZE; i++)
+	{
+		transmit_buffer[STRBYTES_SIZE+ID_SIZE+LENGTH_SIZE+i] = computed_checksum[i];
+	}
+
+	/* Save the length of packet into global variable */
+	transmit_packet_length = HEADER_SIZE + sizeof(body_of_packet);
+
+	/* Return success */
+	return 1;
 }
 
