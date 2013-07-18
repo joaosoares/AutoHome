@@ -11,6 +11,9 @@
  /* Include Header File */
  #include "AHComm.h"
 
+ /* State Module ID */
+ extern const uint8_t IDENTIFIER[] = {0x00, 0x00, 0x00, 0x01};
+
  /* Make initial variable definitions */
  /* Hold location of next write in buffer */
  buffer_write_index = 0;
@@ -62,7 +65,7 @@
  		for (int j = 0; j < STRBYTES_SIZE; i++)
  		{
  			/* Check if byte being read is a valid start byte */
- 			if (buffer[buffer_read_index + j] == STRBYTES)
+ 			if (receive_buffer[buffer_read_index + j] == STRBYTES)
  			{
  				/* Increment tracking of correct bytes */
  				correct_bytes_num++;
@@ -114,8 +117,8 @@
 uint16_t commPacketSize(void)
 {
 	/* Read the LENGTH at the header defined by the protocol */
-	packet_length = buffer[buffer_read_index + STRBYTES_SIZE + ID_SIZE] << 8;
-	packet_length += buffer[buffer_read_index + STRBYTES_SIZE + ID_SIZE + 1];
+	packet_length = receive_buffer[buffer_read_index + STRBYTES_SIZE + ID_SIZE] << 8;
+	packet_length += receive_buffer[buffer_read_index + STRBYTES_SIZE + ID_SIZE + 1];
 
 	return packet_length;
 }
@@ -143,8 +146,8 @@ uint8_t commReadPacket(uint8_t array[])
 			buffer_read_index -= INCOMINGBUFFER_SIZE;
 		}
 		/* Read Byte of Body then erase byte from buffer*/
-		packet[i] = buffer[buffer_read_index];
-		buffer[buffer_read_index] = 0;
+		packet[i] = receive_buffer[buffer_read_index];
+		receive_buffer[buffer_read_index] = 0;
 	}
 
 	/* For future compatibility */
@@ -167,7 +170,7 @@ uint8_t checkPacket(uint16_t start_of_packet)
 	for (int j = 0; j < STRBYTES_SIZE; i++)
 	{
 		/* Check if byte being read is a valid start byte */
-		if (buffer[buffer_read_index + j] == STRBYTES)
+		if (receive_buffer[buffer_read_index + j] == STRBYTES)
 		{
 			/* Increment tracking of correct bytes */
 			correct_bytes_num++;
@@ -183,13 +186,13 @@ uint8_t checkPacket(uint16_t start_of_packet)
 			/* Contains computed checksum */
 			uint8_t computed_checksum[CHECKSUM_SIZE];
 			/* Compute checksum */
-			computeChecksum(start_of_packet, computed_checksum);
+			computeChecksum(start_of_packet, computed_checksum, packet_length);
 			/* Compare all bytes of checksum */
 			/* Keeps track of number of correct checksum bytes */
 			correct_bytes_num = 0;
 			for (int i = 0; i<CHECKSUM_SIZE; i++)
 			{
-				if (computed_checksum[i] == buffer[checksum_index+i])
+				if (computed_checksum[i] == receive_buffer[checksum_index+i])
 				{
 					correct_bytes_num++;
 				}
@@ -211,8 +214,60 @@ uint8_t checkPacket(uint16_t start_of_packet)
  * Function generates a checksum and saves to array whose pointer
  * was passed as argument to function.
  */
-uint computeChecksum(uint16_t start_of_packet, uint8_t computed_checksum)
+uint8_t computeChecksum(uint16_t start_of_packet, uint8_t checksum, uint16_t length)
 {
+	/* To be Created */
+}
+
+/**
+ * This function takes as input the pointer to an array containing of the 
+ * body of a packet to be transmitted. it encapsulates the body and adds
+ * to the transmit_buffer. The function returns:
+ *  0: Buffer Full
+ *  1: Packet added to buffer
+ *  2-255: Reserved for future use
+ */
+uint8_t encapsulatePacket(uint8_t body_of_packet)
+{
+	/* Declare variables */
+	uint8_t temp_write_index = 0;
+
+	/**
+	 * Check if a start byte is found in buffer. If true, a packet is in 
+	 * buffer which is therefore full. 
+	 */
+	if (transmit_buffer[0] == STRBYTES)
+	{
+		/* Indicate buffer is full */
+		return 0;
+	}
+
+	/* Given buffer is not full, start by adding start bytes to packet */
+	for (int i = 0; i < STRBYTES_SIZE; i++)
+	{
+		transmit_buffer[i] = STRBYTES;
+	}
+
+	/* Add ID to buffer */
+	for (int i = 0; i < sizeof(IDENTIFIER); i++)
+	{
+		transmit_buffer[i+STRBYTES_SIZE] = IDENTIFIER[i];
+	}
+
+	/* Add length to packet */
+	/* Determine length of body */
+	uint16_t temp_length = sizeof(bodyofpacket[]);
+	/* Add upper and lower byte of length separately */
+	transmit_buffer[STRBYTES_SIZE+ID_SIZE] = temp_length >> 8;
+	transmit_buffer[STRBYTES_SIZE+ID_SIZE] = temp_length;
+
+	/* Add body to message */
+	for (int i = 0; i < sizeof(body_of_packet); i++)
+	{
+		transmit_buffer[HEADER_SIZE + i] = body_of_packet[i];
+	}
+
+	/* Add the checksum between the length and the body in buffer */
 	
 }
 

@@ -14,6 +14,9 @@
  /* Make Necessary Inclusions */
  #include "avr/io.h"
 
+ /* Define the Module ID in Constant Array */
+ const uint8_t IDENTIFIER[];
+
  /* Make Definitions Regarding Packet Format and Size */
  #define STRBYTES 254
  #define STRBYTES_SIZE 2
@@ -25,6 +28,10 @@
  /* Make Internal Definitions */
  /* Size of circular buffer for incoming packets */
  #define INCOMINGBUFFER_SIZE 255
+ /* Size of non-circular buffer for packets being transmitted */
+ #define TRANSMITBUFFER_SIZE 150
+ /* Modular for Adler32 Checksum */
+ #define MOD_ADLER32 65521
 
 /* Declare Function Prototypes */
 uint8_t commPacketAvailable(void);
@@ -37,7 +44,8 @@ static uint8_t computeChecksum(uint16_t, uint8_t);
 
 
 /* Declare Private Variables */
-uint8_t buffer[INCOMINGBUFFER_SIZE];
+uint8_t receive_buffer[INCOMINGBUFFER_SIZE];
+uint8_t transmit_buffer[TRANSMITBUFFER_SIZE];
 uint16_t buffer_write_index;
 uint16_t buffer_read_index;
 uint16_t module_type;
