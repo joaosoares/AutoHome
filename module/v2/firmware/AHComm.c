@@ -153,13 +153,15 @@ uint8_t commReadPacket(uint8_t array[])
 
 /**
  * Checks if the packet is correctly encapsulated by the defined protocol.
- * Returns:
- *  0 if general error is found
- *  1 if packet is correct
- *  2-255 RESERVED FOR FUTURE
+ * Returns a byte whose bits correspond to:
+ *  Bit 7 (Highest): Passed Checksum
+ *  Bit 6: Correct ID
+ *  Bit 5: Correct Start Byte 
  */
 uint8_t checkPacket(uint16_t start_of_packet)
 {
+	/* Tracks the packet integrity */
+	uint8_t packet_integrity = 0;
 	/* Check for sequence of starting bytes */
 	uint8_t correct_bytes_num = 0;
 	for (int j = 0; j < STRBYTES_SIZE; i++)
@@ -171,16 +173,46 @@ uint8_t checkPacket(uint16_t start_of_packet)
 			correct_bytes_num++;
 		}
 	}
-
 	/* Continue with Checks */
 	if (correct_bytes_num == STRBYTES_SIZE)
 	{
-		/* Check for the ID TO BE IMPLEMENTED!!! */
+		/* Check for the ID ((TO BE IMPLEMENTED!!!)) */
 		if (true)
 		{
 			/* Check the checksum */
-			if 
+			/* Contains computed checksum */
+			uint8_t computed_checksum[CHECKSUM_SIZE];
+			/* Compute checksum */
+			computeChecksum(start_of_packet, computed_checksum);
+			/* Compare all bytes of checksum */
+			/* Keeps track of number of correct checksum bytes */
+			correct_bytes_num = 0;
+			for (int i = 0; i<CHECKSUM_SIZE; i++)
+			{
+				if (computed_checksum[i] == buffer[checksum_index+i])
+				{
+					correct_bytes_num++;
+				}
+			}
+			/* Determine if checksum was correct */
+			if (correct_bytes_num == CHECKSUM_SIZE)
+			{
+				/* Add most significant bit to packet integrity */
+				packet_integrity += 0x80;
+			}
 		}
 	}
+
+	/* Returns the integrity of the packet */
+	return packet_integrity;
+}
+
+/** 
+ * Function generates a checksum and saves to array whose pointer
+ * was passed as argument to function.
+ */
+uint computeChecksum(uint16_t start_of_packet, uint8_t computed_checksum)
+{
+	
 }
 
