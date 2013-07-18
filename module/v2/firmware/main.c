@@ -16,16 +16,16 @@ int main(void)
     /* Setup pin directions and interrupts */
     thismodule.setup();
     /* Setup SPI communication */
-	ahcomm.setup();
+	commSetup();
 
     for(;;){
         /* Are there serial packets in buffer? */
-        if (ahcomm.packetAvailable())
+        if (commPacketAvailable())
         {
         	/* Create array with size of packet to be read */
-        	uint8_t packet[ahcomm.packetSize()];
+        	uint8_t packet[commPacketSize()];
         	/* Read the body of the packet into packet array */
-        	ahcomm.readPacket(packet, ahcomm.packetSize());
+        	commReadPacket(packet, commPacketSize());
 
         	/* Update system status with information from packet */
         	thismodule.actOn(packet);
@@ -38,7 +38,7 @@ int main(void)
         		/* Saves into array the module's current status */
         		thismodule.getStatus(array);
         		/* Packages and sends body through SPI */
-        		ahcomm.transmit(array);
+        		commTransmit(array);
         	}
         }
     }
@@ -48,5 +48,5 @@ int main(void)
 /* Interrupt routine for receiving SPI data */
 ISR (SPI_STC_vect)
 {
-	ahcomm.receive(SPDR);
+	commReceive(SPDR);
 }

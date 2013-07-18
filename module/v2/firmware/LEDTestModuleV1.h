@@ -26,6 +26,7 @@
  #define BRIGHTNESS_MAX 255
 
  /* Declare public functions */
+ uint8_t modSetup(void)
  uint8_t modActOn(uint8_t []);
  uint8_t modStatusRequested();
  uint8_t modGetStatus(uint8_t []);
