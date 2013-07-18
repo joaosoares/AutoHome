@@ -49,6 +49,9 @@ void setup()
 		Serial.print(".");
 	}
 	Serial.println();
-
 	
+	// WEBSERVER
+	// URL Handlers
+	webserver.setDefaultCommand(&main);
+	webserver.addCommand("")
 }
